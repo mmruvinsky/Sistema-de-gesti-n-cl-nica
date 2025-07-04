@@ -16,7 +16,7 @@ class TestReceta(unittest.TestCase):
         self.paciente_valido = Paciente("Juan Pérez", "12345678", "01/01/1990")
         # Crear especialidad y médico válido
         especialidad = Especialidad("Cardiología", ["lunes", "martes"])
-        self.medico_valido = Medico("Dr. García", "MN1234", [especialidad])
+        self.medico_valido = Medico("Juan García", "MN1234", [especialidad])
     
     def test_crear_receta_valida(self):
         medicamentos = ["Paracetamol", "Ibuprofeno"]

@@ -16,7 +16,7 @@ class TestHistoriaClinica(unittest.TestCase):
         """Configuración inicial para cada test"""
         self.paciente = Paciente("Juan Pérez", "12345678", "01/01/1990")
         self.especialidad = Especialidad("cardiologia", ["lunes", "miercoles"])
-        self.medico = Medico("Dr. García", "MN1234", [self.especialidad])
+        self.medico = Medico("Juan García", "MN1234", [self.especialidad])
         self.fecha_turno = datetime(2025, 6, 16, 10, 0)
         
     def test_crear_historia_clinica_valida(self):

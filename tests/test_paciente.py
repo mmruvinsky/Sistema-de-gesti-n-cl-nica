@@ -13,9 +13,15 @@ class TestPaciente(unittest.TestCase):
         self.assertEqual(paciente.obtener_dni(), "12345678")
     
     def test_crear_paciente_nombre_vacio(self):
-        with self.assertRaises(PacienteInvalidoException):
+        with self.assertRaises(PacienteInvalidoException) as contexto:
             Paciente("", "12345678", "01/01/1990")
-    
+        self.assertEqual(str(contexto.exception), "El nombre del paciente no puede estar vacío")
+
+    def test_crear_paciente_nombre_invalido(self):
+        with self.assertRaises(PacienteInvalidoException) as contexto:
+            Paciente("Juan123", "12345678", "01/01/1990")
+        self.assertEqual(str(contexto.exception), "El nombre solo puede contener letras y espacios")
+
     def test_dni_con_puntos_y_espacios(self):
         paciente = Paciente("Test", "12. 345. 678", "01/01/1990")
         self.assertEqual(paciente.obtener_dni(), "12345678")
