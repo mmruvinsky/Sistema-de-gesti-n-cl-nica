@@ -24,8 +24,8 @@ class TestClinica(unittest.TestCase):
         self.esp_neurologia = Especialidad("neurologia", ["martes", "jueves"])
         
         # Crear médicos
-        self.medico1 = Medico("Dr. Juan Perez", "MN1234", [self.esp_cardiologia])
-        self.medico2 = Medico("Dra. Ana Lopez", "MP5678", [self.esp_neurologia])
+        self.medico1 = Medico("Juan Perez", "MN1234", [self.esp_cardiologia])
+        self.medico2 = Medico("Ana Lopez", "MP5678", [self.esp_neurologia])
         
         # Crear pacientes
         self.paciente1 = Paciente("Carlos Rodriguez", "12345678", "15/05/1980")
@@ -46,7 +46,7 @@ class TestClinica(unittest.TestCase):
     
     def test_agregar_medico_nuevo(self):
         """Test agregar médico nuevo"""
-        nuevo_medico = Medico("Dr. Luis Martinez", "MN9999", [self.esp_cardiologia])
+        nuevo_medico = Medico("Luis Martinez", "MN9999", [self.esp_cardiologia])
         self.clinica.agregar_medico(nuevo_medico)
         
         medicos = self.clinica.obtener_medicos_dict()
@@ -55,12 +55,12 @@ class TestClinica(unittest.TestCase):
 
     def test_agregar_medico_existente(self):
         """Test agregar médico con matrícula existente"""
-        medico_duplicado = Medico("Dr. Otro Nombre", "MN1234", [self.esp_neurologia])
+        medico_duplicado = Medico("Otro Nombre", "MN1234", [self.esp_neurologia])
         self.clinica.agregar_medico(medico_duplicado)
         
         # Verificar que no se sobrescribió
         medicos = self.clinica.obtener_medicos_dict()
-        self.assertEqual(medicos["MN1234"].obtener_nombre(), "Dr. Juan Perez")
+        self.assertEqual(medicos["MN1234"].obtener_nombre(), "Juan Perez")
 
     # ===== TESTS AGREGAR PACIENTE =====
     
@@ -179,7 +179,7 @@ class TestClinica(unittest.TestCase):
         """Test obtener médico existente por matrícula"""
         medico = self.clinica.obtener_medico_por_matricula("MN1234")
         self.assertEqual(medico, self.medico1)
-        self.assertEqual(medico.obtener_nombre(), "Dr. Juan Perez")
+        self.assertEqual(medico.obtener_nombre(), "Juan Perez")
 
     def test_obtener_medico_por_matricula_no_existente(self):
         """Test obtener médico no existente por matrícula"""

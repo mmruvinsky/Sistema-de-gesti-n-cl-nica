@@ -17,6 +17,7 @@ class Paciente:
 
     def obtener_dni(self) -> str:
         return self.__dni
-    
+
     def __str__(self) -> str:
-        return f"Paciente: {self.__nombre}, DNI: {self.__dni}, Fecha de nacimiento: {self.__fecha_de_nacimiento}"
+        formato = self.__fecha_de_nacimiento.strftime('%d/%m/%Y')
+        return f"Paciente: {self.__nombre}, DNI: {self.__dni}, Fecha de nacimiento: {formato}"

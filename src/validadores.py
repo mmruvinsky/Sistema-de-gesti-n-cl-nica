@@ -64,7 +64,9 @@ def _validar_fecha(fecha_str: str) -> datetime:
             raise FechaInvalidaException("La fecha debe tener formato dd/mm/aaaa y ser válida")
         
         # Verificar coherencia de la fecha
-        if fecha_limp.date() > datetime.today().date():
+        fecha_act = datetime.today().date()
+
+        if fecha_limp.date() > fecha_act:
             raise FechaInvalidaException("La fecha no puede estar en el futuro")
         
         limite_min = datetime.strptime("01/01/1900", "%d/%m/%Y")

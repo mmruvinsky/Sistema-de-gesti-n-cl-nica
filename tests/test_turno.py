@@ -13,7 +13,7 @@ class TestTurno(unittest.TestCase):
     def setUp(self):
         """Configuración inicial para cada test"""
         self.especialidad = Especialidad("cardiologia", ["lunes", "miercoles"])
-        self.medico = Medico("Dr. Juan Perez", "MN1234", [self.especialidad])
+        self.medico = Medico("Juan Perez", "MN1234", [self.especialidad])
         self.paciente = Paciente("Carlos Rodriguez", "12345678", "15/05/1980")
         self.fecha_hora = datetime(2025, 6, 16, 10, 0)  # Lunes 16 de junio 2025, 10:00
     
@@ -32,7 +32,7 @@ class TestTurno(unittest.TestCase):
     def test_obtener_medico(self):
         turno = Turno(self.paciente, self.medico, self.fecha_hora, "cardiologia")
         medico_obtenido = turno.obtener_medico()
-        self.assertEqual(medico_obtenido.obtener_nombre(), "Dr. Juan Perez")
+        self.assertEqual(medico_obtenido.obtener_nombre(), "Juan Perez")
         self.assertEqual(medico_obtenido.obtener_matricula(), "MN1234")
     
     def test_obtener_fecha_hora(self):
@@ -47,7 +47,7 @@ class TestTurno(unittest.TestCase):
         turno = Turno(self.paciente, self.medico, self.fecha_hora, "cardiologia")
         str_turno = str(turno)
         self.assertIn("12345678", str_turno)  # DNI del paciente
-        self.assertIn("Dr. Juan Perez", str_turno)
+        self.assertIn("Juan Perez", str_turno)
         self.assertIn("cardiologia", str_turno)
         self.assertIn("2025-06-16 10:00", str_turno)
     
@@ -55,7 +55,7 @@ class TestTurno(unittest.TestCase):
         turno1 = Turno(self.paciente, self.medico, self.fecha_hora, "cardiologia")
         
         esp_neurologia = Especialidad("neurologia", ["martes", "jueves"])
-        medico2 = Medico("Dra. Ana Lopez", "MP5678", [esp_neurologia])
+        medico2 = Medico("Ana Lopez", "MP5678", [esp_neurologia])
         fecha2 = datetime(2025, 6, 17, 14, 0)  
         turno2 = Turno(self.paciente, medico2, fecha2, "neurologia")
         
