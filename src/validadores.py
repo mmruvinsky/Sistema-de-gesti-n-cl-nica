@@ -70,6 +70,7 @@ def _validar_fecha(fecha_str: str) -> datetime:
             raise FechaInvalidaException("La fecha no puede estar en el futuro")
         
         limite_min = datetime.strptime("01/01/1900", "%d/%m/%Y")
+        
         if fecha_limp < limite_min:
             raise FechaInvalidaException("La fecha no puede ser anterior al 01/01/1900")
 
