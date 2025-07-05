@@ -26,9 +26,9 @@ class Turno:
     def __str__(self) -> str:
         return (
             f"Turno(\n"
-            f"  Paciente: {self.__paciente},\n"
-            f"  Médico: {self.__medico},\n"
+            f"  Paciente: {self.__paciente.obtener_nombre()} (DNI: {self.__paciente.obtener_dni()}),\n"
+            f"  Médico: {self.__medico.obtener_nombre()} (Matrícula: {self.__medico.obtener_matricula()}),\n"
             f"  Especialidad: {self.__especialidad},\n"
-            f"  Fecha y hora: {self.__fecha_hora.strftime('%Y-%m-%d %H:%M')}\n"
+            f"  Fecha y hora: {self.__fecha_hora.strftime('%d/%m/%Y %H:%M')}\n"
             f")"
         )

@@ -25,8 +25,9 @@ class Medico:
         return self.__especialidades.copy()
     
     def obtener_especialidad_para_dia(self, dia: str) -> str | None:
+        dia_normalizado = dia.lower().strip()
         for especialidad in self.__especialidades:
-            if especialidad.verificar_dia(dia):
+            if especialidad.verificar_dia(dia_normalizado):
                 return especialidad.obtener_especialidad()
         return None
     
@@ -37,4 +38,8 @@ class Medico:
             self.__especialidades.append(especialidad)
        
     def __str__(self) -> str:
-        return f"Medico: {self.__nombre}, Matricula: {self.__matricula}, Especialidades: {self.__especialidades}"
+        if self.__especialidades:
+            especialidades_str = ", ".join(str(esp) for esp in self.__especialidades)
+            return f"Medico: {self.__nombre}, Matricula: {self.__matricula}, Especialidades: [{especialidades_str}]"
+        else:
+            return f"Medico: {self.__nombre}, Matricula: {self.__matricula}, Sin especialidades"

@@ -68,8 +68,9 @@ class Clinica:
         
         # VALIDAR ESPECIALIDAD
         tiene_especialidad = False
+        especialidad_normalizada = especialidad.lower().strip()
         for esp in medico.obtener_especialidades():
-            if esp.obtener_especialidad() == especialidad:
+            if esp.obtener_especialidad().lower().strip() == especialidad_normalizada:
                 tiene_especialidad = True
                 break
 
@@ -81,7 +82,7 @@ class Clinica:
         dia_semana = self.obtener_dia_semana_en_espanol(fecha_hora)
         especialidad_para_dia = medico.obtener_especialidad_para_dia(dia_semana)
 
-        if especialidad_para_dia != especialidad:
+        if not especialidad_para_dia or especialidad_para_dia.lower().strip() != especialidad_normalizada:
             print(f"El médico no atiende {especialidad} los {dia_semana}")
             return False
         

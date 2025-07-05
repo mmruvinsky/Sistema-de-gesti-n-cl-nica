@@ -190,7 +190,7 @@ class CLI:
         except Exception as e:
             print(f"❌ Error: {e}")
     
-        def listar_medicos(self):
+    def listar_medicos(self):
             """Lista todos los médicos."""
             print("\n📋 Lista de Médicos")
             print("-" * 50)
