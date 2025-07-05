@@ -12,9 +12,7 @@ from datetime import datetime
 class TestReceta(unittest.TestCase):
     
     def setUp(self):
-        # Crear instancias válidas para usar en los tests
         self.paciente_valido = Paciente("Juan Pérez", "12345678", "01/01/1990")
-        # Crear especialidad y médico válido
         especialidad = Especialidad("Cardiología", ["lunes", "martes"])
         self.medico_valido = Medico("Juan García", "MN1234", [especialidad])
     
@@ -46,15 +44,31 @@ class TestReceta(unittest.TestCase):
         receta = Receta(self.paciente_valido, self.medico_valido, medicamentos)
         fecha_actual = datetime.now().strftime("%d/%m/%Y")
         
-        expected = f"Receta: Paciente: {self.paciente_valido}, Médico: {self.medico_valido}, Medicamentos: [Paracetamol, Ibuprofeno], Fecha: {fecha_actual}  "
+        expected = (
+            f"Receta:\n"
+            f"   Paciente: {self.paciente_valido.obtener_nombre()}\n"
+            f"   DNI: {self.paciente_valido.obtener_dni()}\n"
+            f"   Médico: {self.medico_valido.obtener_nombre()}\n"
+            f"   Matrícula: {self.medico_valido.obtener_matricula()}\n"
+            f"   Medicamentos: Paracetamol, Ibuprofeno\n"
+            f"   Fecha: {fecha_actual}"
+        )
         self.assertEqual(str(receta), expected)
-    
+
     def test_str_representation_un_medicamento(self):
         medicamentos = ["Paracetamol"]
         receta = Receta(self.paciente_valido, self.medico_valido, medicamentos)
         fecha_actual = datetime.now().strftime("%d/%m/%Y")
         
-        expected = f"Receta: Paciente: {self.paciente_valido}, Médico: {self.medico_valido}, Medicamentos: [Paracetamol], Fecha: {fecha_actual}  "
+        expected = (
+            f"Receta:\n"
+            f"   Paciente: {self.paciente_valido.obtener_nombre()}\n"
+            f"   DNI: {self.paciente_valido.obtener_dni()}\n"
+            f"   Médico: {self.medico_valido.obtener_nombre()}\n"
+            f"   Matrícula: {self.medico_valido.obtener_matricula()}\n"
+            f"   Medicamentos: Paracetamol\n"
+            f"   Fecha: {fecha_actual}"
+        )
         self.assertEqual(str(receta), expected)
 
 

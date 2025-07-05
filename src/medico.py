@@ -36,10 +36,7 @@ class Medico:
     def agregar_especialidad(self, especialidad: Especialidad) -> None:
         if especialidad not in self.__especialidades:
             self.__especialidades.append(especialidad)
-       
+        
     def __str__(self) -> str:
-        if self.__especialidades:
-            especialidades_str = ", ".join(str(esp) for esp in self.__especialidades)
-            return f"Medico: {self.__nombre}, Matricula: {self.__matricula}, Especialidades: [{especialidades_str}]"
-        else:
-            return f"Medico: {self.__nombre}, Matricula: {self.__matricula}, Sin especialidades"
+        especialidades_str = [str(esp) for esp in self.__especialidades]
+        return f"Medico: {self.__nombre}, Matricula: {self.__matricula}, Especialidades: {especialidades_str}"

@@ -87,20 +87,19 @@ class TestHistoriaClinica(unittest.TestCase):
         historia.agregar_receta(receta)
         
         recetas = historia.obtener_recetas()
-        recetas.clear()  # Modificar la copia
+        recetas.clear()  
         
-        # La historia original no debe verse afectada
         self.assertEqual(len(historia.obtener_recetas()), 1)
-    
+
     def test_str_representation_sin_datos(self):
         historia = HistoriaClinica(self.paciente)
         str_historia = str(historia)
         
-        self.assertIn("HistoriaClinica", str_historia)
+        self.assertIn("HISTORIA CLÍNICA", str_historia)  
         self.assertIn("Juan Pérez", str_historia)
         self.assertIn("Sin turnos registrados", str_historia)
         self.assertIn("Sin recetas registradas", str_historia)
-    
+
     def test_str_representation_con_datos(self):
         historia = HistoriaClinica(self.paciente)
         turno = Turno(self.paciente, self.medico, self.fecha_turno, "cardiologia")
@@ -110,11 +109,10 @@ class TestHistoriaClinica(unittest.TestCase):
         historia.agregar_receta(receta)
         str_historia = str(historia)
         
-        self.assertIn("HistoriaClinica", str_historia)
+        self.assertIn("HISTORIA CLÍNICA", str_historia)
         self.assertIn("Juan Pérez", str_historia)
         self.assertNotIn("Sin turnos registrados", str_historia)
         self.assertNotIn("Sin recetas registradas", str_historia)
-
 
 if __name__ == '__main__':
     unittest.main()

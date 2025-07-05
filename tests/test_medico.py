@@ -92,7 +92,7 @@ class TestMedico(unittest.TestCase):
     
     def test_str_representation(self):
         medico = Medico("Juan Pérez", "MN1234", [self.esp_cardiologia])
-        expected = f"Medico: Juan Pérez, Matricula: MN1234, Especialidades: {[self.esp_cardiologia]}"
+        expected = f"Medico: Juan Pérez, Matricula: MN1234, Especialidades: {[str(self.esp_cardiologia)]}"
         self.assertEqual(str(medico), expected)
 
 

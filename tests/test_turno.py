@@ -49,7 +49,7 @@ class TestTurno(unittest.TestCase):
         self.assertIn("12345678", str_turno)  # DNI del paciente
         self.assertIn("Juan Perez", str_turno)
         self.assertIn("cardiologia", str_turno)
-        self.assertIn("2025-06-16 10:00", str_turno)
+        self.assertIn("16/06/2025 10:00", str_turno)
     
     def test_turno_con_diferentes_especialidades(self):
         turno1 = Turno(self.paciente, self.medico, self.fecha_hora, "cardiologia")
