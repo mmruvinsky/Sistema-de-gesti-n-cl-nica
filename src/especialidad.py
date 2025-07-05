@@ -16,5 +16,4 @@ class Especialidad:
         return self.__dias.copy()
     
     def __str__(self) -> str:
-        dias_str = ", ".join(self.__dias)
-        return f"{self.__tipo} ({dias_str})"
+            return f"Tipo de especialidad: {self.__tipo}, Días: {self.__dias}"

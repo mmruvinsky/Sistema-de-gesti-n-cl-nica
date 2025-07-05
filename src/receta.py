@@ -13,10 +13,17 @@ class Receta:
         self.__medicamentos = medicamentos
         self.__fecha = datetime.now()
 
+  
     def __str__(self) -> str:
         medicamentos_str = ", ".join(self.__medicamentos)
         fecha_str = self.__fecha.strftime("%d/%m/%Y")
-        return f"Receta: Paciente: {self.__paciente}, Médico: {self.__medico}, Medicamentos: [{medicamentos_str}], Fecha: {fecha_str}  "
-
-
-     
+        
+        return (
+            f"Receta:\n"
+            f"   Paciente: {self.__paciente.obtener_nombre()}\n"
+            f"   DNI: {self.__paciente.obtener_dni()}\n"
+            f"   Médico: {self.__medico.obtener_nombre()}\n"
+            f"   Matrícula: {self.__medico.obtener_matricula()}\n"
+            f"   Medicamentos: {medicamentos_str}\n"
+            f"   Fecha: {fecha_str}"
+        )
