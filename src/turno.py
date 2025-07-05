@@ -20,6 +20,9 @@ class Turno:
     def obtener_fecha_hora(self) -> datetime:
         return self.__fecha_hora
     
+    def obtener_especialidad(self) -> str:
+        return self.__especialidad
+    
     def __str__(self) -> str:
         return (
             f"Turno(\n"

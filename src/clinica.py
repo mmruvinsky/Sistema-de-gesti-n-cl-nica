@@ -100,7 +100,12 @@ class Clinica:
         historia = self.obtener_historia_clinica_por_DNI(dni)
         if historia:
             historia.agregar_turno(turno)
-        print(f"Turno agregado a la historia clínica del paciente con dni:{dni}")
+            print(f"Turno agregado a la historia clínica del paciente con dni:{dni}")
+        else:
+            nueva_historia = HistoriaClinica(paciente)
+            nueva_historia.agregar_turno(turno)
+            self.__historias_clinicas[dni] = nueva_historia
+            print(f"Historia clínica creada y turno agregado para el paciente con DNI: {dni}")
 
         return True
     

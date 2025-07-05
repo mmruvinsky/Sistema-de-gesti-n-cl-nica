@@ -10,6 +10,7 @@ try:
     from src.medico import Medico
     from src.especialidad import Especialidad
     from src.excepciones import *
+    from src.validadores import *
 except ImportError:
     print("❌ Error: No se pueden importar los módulos necesarios")
     print("Asegúrate de que la estructura de directorios sea correcta:")
@@ -43,7 +44,6 @@ class CLI:
         print("2. Gestión de Médicos")
         print("3. Gestión de Turnos")
         print("4. Gestión de Recetas")
-        print("5. Reportes")
         print("0. Salir")
     
     def solicitar_opcion(self, max_opcion: int) -> int:
@@ -153,7 +153,7 @@ class CLI:
         print("-" * 20)
         
         try:
-            nombre = input("Nombre: ").strip()
+            nombre = input("Nombre y apellido: ").strip()
             matricula = input("Matrícula (MN#### o MP####): ").strip()
             
             if not nombre:
@@ -190,18 +190,29 @@ class CLI:
         except Exception as e:
             print(f"❌ Error: {e}")
     
-    def listar_medicos(self):
-        """Lista todos los médicos."""
-        print("\n📋 Lista de Médicos")
-        print("-" * 30)
-        
-        medicos = self.clinica.obtener_medicos()
-        if not medicos:
-            print("No hay médicos registrados")
-            return
-        
-        for i, medico in enumerate(medicos, 1):
-            print(f"{i}. {medico.obtener_nombre()} - Matrícula: {medico.obtener_matricula()}")
+        def listar_medicos(self):
+            """Lista todos los médicos."""
+            print("\n📋 Lista de Médicos")
+            print("-" * 50)
+            
+            medicos = clinica.obtener_medicos()
+            if not medicos:
+                print("No hay médicos registrados")
+                return
+            
+            for i, medico in enumerate(medicos, 1):
+                print(f"{i}. {medico.obtener_nombre()}")
+                print(f"   Matrícula: {medico.obtener_matricula()}")
+                
+                especialidades = medico.obtener_especialidades()
+                if especialidades:
+                    print("   Especialidades:")
+                    for esp in especialidades:
+                        # Usar el __str__ mejorado que incluye días
+                        print(f"     • {esp}")
+                else:
+                    print("   Sin especialidades registradas")
+                print() 
     
     # === GESTIÓN DE TURNOS ===
     
@@ -260,6 +271,17 @@ class CLI:
         if not turnos:
             print("No hay turnos registrados")
             return
+        
+        for i, turno in enumerate(turnos, 1):
+            paciente = turno.obtener_paciente()
+            medico = turno.obtener_medico()
+            fecha_hora = turno.obtener_fecha_hora()
+        
+        print(f"{i}. Paciente: {paciente.obtener_nombre()} (DNI: {paciente.obtener_dni()})")
+        print(f"   Médico: {medico.obtener_nombre()} (Matrícula: {medico.obtener_matricula()})")
+        print(f"   Fecha y hora: {fecha_hora.strftime('%d/%m/%Y %H:%M')}")
+        print(f"   Especialidad: {turno.obtener_especialidad()}")
+        print("-" * 30)
     
     # === GESTIÓN DE RECETAS ===
     
