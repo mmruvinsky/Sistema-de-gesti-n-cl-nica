@@ -17,6 +17,9 @@ class Paciente:
 
     def obtener_dni(self) -> str:
         return self.__dni
+    
+    def obtener_fecha_nacimiento(self) -> datetime:
+        return self.__fecha_de_nacimiento
 
     def __str__(self) -> str:
         formato = self.__fecha_de_nacimiento.strftime('%d/%m/%Y')

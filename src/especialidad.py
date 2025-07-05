@@ -6,8 +6,8 @@ class Especialidad:
         self.__dias = [d.lower() for d in dias]
 
     def verificar_dia(self, dia: str) -> bool:
-        dia = dia.lower()
-        return dia in self.__dias
+        dia_normalizado = dia.lower().strip()
+        return dia_normalizado in self.__dias
 
     def obtener_especialidad(self):
         return self.__tipo

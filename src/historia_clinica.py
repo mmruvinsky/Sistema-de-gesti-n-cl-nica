@@ -1,6 +1,7 @@
 from src.turno import Turno
 from src.paciente import Paciente
 from src.receta import Receta
+from src.turno import Turno
 
 class HistoriaClinica:
 
@@ -26,13 +27,33 @@ class HistoriaClinica:
         self.__recetas.append(receta)
 
     def __str__(self) -> str:
-        turnos_str = "\n    ".join(str(t) for t in self.__turnos) or "Sin turnos registrados"
-        recetas_str = "\n    ".join(str(r) for r in self.__recetas) or "Sin recetas registradas"
-
-        return (
-            f"HistoriaClinica(\n"
-            f"  Paciente: {self.__paciente},\n"
-            f"  Turnos:\n    {turnos_str},\n"
-            f"  Recetas:\n    {recetas_str}\n"
-            f")"
-        )
+        resultado = f"📄 HISTORIA CLÍNICA\n"
+        resultado += f"{'='*50}\n"
+        resultado += f"👤 Paciente: {self.__paciente.obtener_nombre()}\n"
+        resultado += f"🆔 DNI: {self.__paciente.obtener_dni()}\n"
+        resultado += f"📅 Fecha de nacimiento: {self.__paciente.obtener_fecha_nacimiento().strftime('%d/%m/%Y')}\n"
+        resultado += f"{'='*50}\n"
+        
+        # Sección de turnos
+        resultado += f"\n📋 TURNOS:\n"
+        resultado += f"{'-'*30}\n"
+        if self.__turnos:
+            for i, turno in enumerate(self.__turnos, 1):
+                resultado += f"{i}. Médico: {turno.obtener_medico().obtener_nombre()}\n"
+                resultado += f"   Matrícula: {turno.obtener_medico().obtener_matricula()}\n"
+                resultado += f"   Especialidad: {turno.obtener_especialidad()}\n"
+                resultado += f"   Fecha: {turno.obtener_fecha_hora().strftime('%d/%m/%Y %H:%M')}\n"
+                resultado += f"\n"
+        else:
+            resultado += "   Sin turnos registrados\n"
+        
+        # Sección de recetas
+        resultado += f"\n💊 RECETAS:\n"
+        resultado += f"{'-'*30}\n"
+        if self.__recetas:
+            for i, receta in enumerate(self.__recetas, 1):
+                resultado += f"{i}. {receta}\n"
+        else:
+            resultado += "   Sin recetas registradas\n"
+        
+        return resultado
