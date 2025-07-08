@@ -110,6 +110,37 @@ class Clinica:
 
         return True
     
+# CANCELAR TURNO
+
+    def cancelar_turno(self, dni: str, indice_turno: int) -> bool:
+        # VERIFICAR SI EXISTE PACIENTE
+        if not self.validar_existencia_paciente(dni):
+            return False
+        
+        # OBTENER TURNOS DEL PACIENTE
+        turnos_paciente = self.obtener_turnos_por_DNI(dni)
+        
+        # VERIFICAR SI EXISTEN TURNOS PARA ESE DNI
+        if not turnos_paciente:
+            return False
+        
+        # VERIFICAR OPCION INDICE
+        if indice_turno < 0 or indice_turno >= len(turnos_paciente):
+            return False
+        
+        # ELIMINAMOS TURNO DE TURNOS
+        turno_a_cancelar = turnos_paciente[indice_turno]
+        self.__turnos.remove(turno_a_cancelar)
+        
+        # ELIMINAMOS TURNO DE HISTORIA CLINICA
+        historia = self.obtener_historia_clinica_por_DNI(dni)
+        if historia:
+            historia.eliminar_turno(turno_a_cancelar)
+        
+        # DEVUELVE TRUE SI SE ELIMINÓ CORRECTAMENTE
+        return True
+  
+        
 # EMITIR RECETA
 
     def emitir_receta(self, dni: str, matricula: str, medicamentos: list[str]) -> str:
@@ -168,6 +199,13 @@ class Clinica:
         if hc is None:
             return None 
         return hc
+    
+    def obtener_turnos_por_DNI(self, dni: str) -> list[Turno]:
+        turnos_paciente = []
+        for turno in self.__turnos:
+            if turno.obtener_paciente().obtener_dni() == dni:
+                turnos_paciente.append(turno)
+        return turnos_paciente
 
     def obtener_turnos(self) -> list[Turno]:  
         return self.__turnos.copy()  
@@ -199,6 +237,12 @@ class Clinica:
                 return True
             else:
                 return False
+            
+    def validar_existencia_turno(self, dni: str) -> bool:
+        if dni in self.__turnos:
+            return True
+        else:  
+            return False
                      
     def validar_turno_duplicado(self, matricula: str, fecha_hora: datetime) -> bool:
             for turno in self.__turnos:

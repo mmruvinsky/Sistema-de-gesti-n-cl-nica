@@ -1,7 +1,7 @@
 from src.turno import Turno
 from src.paciente import Paciente
 from src.receta import Receta
-from src.turno import Turno
+from src.medico import Medico
 
 class HistoriaClinica:
 
@@ -25,6 +25,10 @@ class HistoriaClinica:
 
     def agregar_receta(self, receta: Receta) -> None:
         self.__recetas.append(receta)
+
+    def eliminar_turno(self, turno: Turno) -> None:
+        if turno in self.__turnos:
+            self.__turnos.remove(turno)
 
     def __str__(self) -> str:
         resultado = f"📄 HISTORIA CLÍNICA\n"

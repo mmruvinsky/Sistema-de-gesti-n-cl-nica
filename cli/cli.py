@@ -208,7 +208,6 @@ class CLI:
                 if especialidades:
                     print("   Especialidades:")
                     for esp in especialidades:
-                        # Usar el __str__ mejorado que incluye días
                         print(f"     • {esp}")
                 else:
                     print("   Sin especialidades registradas")
@@ -225,14 +224,17 @@ class CLI:
             print("-" * 30)
             print("1. Agendar Turno")
             print("2. Listar Turnos")
+            print("3. Eliminar Turno")
             print("0. Volver")
             
-            opcion = self.solicitar_opcion(2)
+            opcion = self.solicitar_opcion(3)
             
             if opcion == 1:
                 self.agendar_turno()
             elif opcion == 2:
                 self.listar_turnos()
+            elif opcion == 3:
+                self.eliminar_turno()
             elif opcion == 0:
                 break
             
@@ -282,7 +284,62 @@ class CLI:
         print(f"   Fecha y hora: {fecha_hora.strftime('%d/%m/%Y %H:%M')}")
         print(f"   Especialidad: {turno.obtener_especialidad()}")
         print("-" * 30)
-    
+
+    def cancelar_turno(self):
+        print("\n=== CANCELAR TURNO ===")
+        
+        # SOLICITAR DNI
+        dni = input("Ingrese el DNI del paciente: ").strip()
+        
+        # OBTENER TURNOS DEL PACIENTE
+        turnos_paciente = self.clinica.obtener_turnos_por_DNI(dni)
+        
+        # VERIFICAR SI TIENE TURNOS
+        if not turnos_paciente:
+            print(f"El paciente con DNI {dni} no tiene turnos registrados o no existe")
+            return
+        
+        # MOSTRAR LISTA DE TURNOS
+        print(f"\nTurnos del paciente con DNI {dni}:")
+        print("-" * 60)
+        for i, turno in enumerate(turnos_paciente):
+            fecha_str = turno.obtener_fecha_hora().strftime('%d/%m/%Y %H:%M')
+            print(f"{i + 1}. Médico: {turno.obtener_medico().obtener_nombre()}")
+            print(f"   Especialidad: {turno.obtener_especialidad()}")
+            print(f"   Fecha y hora: {fecha_str}")
+            print("-" * 30)
+        
+        # SOLICITAR OPCIÓN AL USUARIO
+        try:
+            opcion = int(input(f"\nIngrese el número del turno a cancelar (1-{len(turnos_paciente)}): "))
+            
+            if opcion < 1 or opcion > len(turnos_paciente):
+                print("Error: Opción inválida. Debe seleccionar un número de la lista.")
+                return
+  
+            indice_turno = opcion - 1
+            
+            # CONFIRMAR CANCELACIÓN
+            turno_seleccionado = turnos_paciente[indice_turno]
+            fecha_str = turno_seleccionado.obtener_fecha_hora().strftime('%d/%m/%Y %H:%M')
+            print(f"\n¿Está seguro que desea cancelar el turno del {fecha_str} con {turno_seleccionado.obtener_medico().obtener_nombre()}?")
+            confirmacion = input("Escriba 'SI' para confirmar: ").strip().upper()
+            
+            if confirmacion != 'SI':
+                print("Cancelación abortada")
+                return
+            
+            # CANCELAR EL TURNO (llamada al método corregido de CLINICA)
+            if self.clinica.cancelar_turno(dni, indice_turno):
+                print("✅ Turno cancelado exitosamente")
+            else:
+                print("❌ Error al cancelar el turno")
+                
+        except ValueError:
+            print("Error: Debe ingresar un número válido")
+        except Exception as e:
+            print(f"Error inesperado: {e}")
+            
     # === GESTIÓN DE RECETAS ===
     
     def menu_recetas(self):
