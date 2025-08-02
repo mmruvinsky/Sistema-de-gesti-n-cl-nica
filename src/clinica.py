@@ -50,65 +50,69 @@ class Clinica:
 
 # AGENDAR TURNO
 
-    def agendar_turno(self, dni: str, matricula: str, especialidad: str, fecha_hora: datetime):
-    
-        # VERIFICAR SI EL PACIENTE ESTÁ REGISTRADO EN LA CLINICA
+    def agendar_turno(self, dni: str, matricula: str, especialidad: str, fecha_hora: datetime) -> Turno:
+
+        # VERIFICAR SI EL PACIENTE ESTÁ REGISTRADO EN LA CLÍNICA
         if not self.validar_existencia_paciente(dni):
-            print(f"Paciente con DNI: {dni} no está registrado en la clínica")
-            return False
-            
-        # VERIFICAR SI EL MEDICO ESTA REGISTRADO EN LA CLINICA
+            raise PacienteNoEncontradoException(
+                f"Paciente con DNI {dni} no está registrado en la clínica"
+            )
+
+        # VERIFICAR SI EL MÉDICO ESTÁ REGISTRADO EN LA CLÍNICA
         if not self.validar_existencia_medico(matricula):
-            print(f"Médico con matrícula: {matricula} no está registrado en la clínica")
-            return False
-        
+            raise MedicoNoEncontradoException(
+                f"Médico con matrícula {matricula} no está registrado en la clínica"
+            )
+
         # OBTENER LOS OBJETOS
-        paciente = self.obtener_paciente_por_dni(dni) 
+        paciente = self.obtener_paciente_por_dni(dni)
         medico = self.obtener_medico_por_matricula(matricula)
-        
+
         # VALIDAR ESPECIALIDAD
-        tiene_especialidad = False
         especialidad_normalizada = especialidad.lower().strip()
-        for esp in medico.obtener_especialidades():
-            if esp.obtener_especialidad().lower().strip() == especialidad_normalizada:
-                tiene_especialidad = True
-                break
+        tiene_especialidad = any(
+            esp.obtener_especialidad().lower().strip() == especialidad_normalizada
+            for esp in medico.obtener_especialidades()
+        )
 
         if not tiene_especialidad:
-            print(f"El médico no atiende la especialidad {especialidad}")
-            return False
-        
-        #VALIDAR SI EL MEDICO ATIENDE ESA ESPECIALIDAD ESE DIA
+            raise MedicoNoDisponibleException(
+                f"El médico no atiende la especialidad {especialidad}"
+            )
+
+        # VALIDAR SI EL MÉDICO ATIENDE ESA ESPECIALIDAD ESE DÍA
         dia_semana = self.obtener_dia_semana_en_espanol(fecha_hora)
         especialidad_para_dia = medico.obtener_especialidad_para_dia(dia_semana)
 
-        if not especialidad_para_dia or especialidad_para_dia.lower().strip() != especialidad_normalizada:
-            print(f"El médico no atiende {especialidad} los {dia_semana}")
-            return False
-        
+        if (
+            not especialidad_para_dia
+            or especialidad_para_dia.lower().strip() != especialidad_normalizada
+        ):
+            raise MedicoNoDisponibleException(
+                f"El médico no atiende {especialidad} los {dia_semana}"
+            )
+
         # VALIDAR TURNO DUPLICADO
         if self.validar_turno_duplicado(matricula, fecha_hora):
-            raise TurnoOcupadoException(f"Ya existe un turno para ese médico en esa fecha y hora")
-            return False
-        
+            raise TurnoOcupadoException(
+                "Ya existe un turno para ese médico en esa fecha y hora"
+            )
+
         # CREAR EL TURNO (después de todas las validaciones)
         turno = Turno(paciente, medico, fecha_hora, especialidad)
-        
+
         # AGREGAR EL TURNO
         self.__turnos.append(turno)
-        print(f"Turno agendado correctamente para el paciente {paciente.obtener_nombre()} con el médico {medico.obtener_nombre()}.")
-        
+
         historia = self.obtener_historia_clinica_por_DNI(dni)
         if historia:
             historia.agregar_turno(turno)
-            print(f"Turno agregado a la historia clínica del paciente con dni:{dni}")
         else:
             nueva_historia = HistoriaClinica(paciente)
             nueva_historia.agregar_turno(turno)
             self.__historias_clinicas[dni] = nueva_historia
-            print(f"Historia clínica creada y turno agregado para el paciente con DNI: {dni}")
 
-        return True
+        return turno
     
 # EMITIR RECETA
 

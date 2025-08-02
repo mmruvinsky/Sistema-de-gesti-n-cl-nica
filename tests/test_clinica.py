@@ -11,7 +11,8 @@ from src.excepciones import (
     PacienteNoEncontradoException,
     MedicoNoEncontradoException,
     TurnoOcupadoException,
-    RecetaInvalidaException
+    RecetaInvalidaException,
+    MedicoNoDisponibleException,
 )
 
 
@@ -89,9 +90,9 @@ class TestClinica(unittest.TestCase):
         # Lunes - día que el médico atiende cardiología
         fecha_turno = datetime(2025, 6, 16, 10, 0)  # 16 jun 2025 es lunes
         
-        resultado = self.clinica.agendar_turno("12345678", "MN1234", "cardiologia", fecha_turno)
-        
-        self.assertTrue(resultado)
+        turno = self.clinica.agendar_turno("12345678", "MN1234", "cardiologia", fecha_turno)
+
+        self.assertIsNotNone(turno)
         turnos = self.clinica.obtener_turnos()
         self.assertEqual(len(turnos), 1)
 
@@ -99,45 +100,40 @@ class TestClinica(unittest.TestCase):
         """Test agendar turno con paciente no registrado"""
         fecha_turno = datetime(2025, 6, 16, 10, 0)
         
-        resultado = self.clinica.agendar_turno("99999999", "MN1234", "cardiologia", fecha_turno)
-        
-        self.assertFalse(resultado)
+        with self.assertRaises(PacienteNoEncontradoException):
+            self.clinica.agendar_turno("99999999", "MN1234", "cardiologia", fecha_turno)
         self.assertEqual(len(self.clinica.obtener_turnos()), 0)
 
     def test_agendar_turno_medico_no_registrado(self):
         """Test agendar turno con médico no registrado"""
         fecha_turno = datetime(2025, 6, 16, 10, 0)
         
-        resultado = self.clinica.agendar_turno("12345678", "MN9999", "cardiologia", fecha_turno)
-        
-        self.assertFalse(resultado)
+        with self.assertRaises(MedicoNoEncontradoException):
+            self.clinica.agendar_turno("12345678", "MN9999", "cardiologia", fecha_turno)
         self.assertEqual(len(self.clinica.obtener_turnos()), 0)
 
     def test_agendar_turno_especialidad_no_disponible(self):
         """Test agendar turno con especialidad que el médico no tiene"""
         fecha_turno = datetime(2025, 6, 16, 10, 0)
         
-        resultado = self.clinica.agendar_turno("12345678", "MN1234", "neurologia", fecha_turno)
-        
-        self.assertFalse(resultado)
+        with self.assertRaises(MedicoNoDisponibleException):
+            self.clinica.agendar_turno("12345678", "MN1234", "neurologia", fecha_turno)
 
     def test_agendar_turno_dia_no_disponible(self):
         """Test agendar turno en día que el médico no atiende esa especialidad"""
         # Viernes - día que el médico NO atiende cardiología
         fecha_turno = datetime(2025, 6, 20, 10, 0)  # 20 jun 2025 es viernes
         
-        resultado = self.clinica.agendar_turno("12345678", "MN1234", "cardiologia", fecha_turno)
-        
-        self.assertFalse(resultado)
+        with self.assertRaises(MedicoNoDisponibleException):
+            self.clinica.agendar_turno("12345678", "MN1234", "cardiologia", fecha_turno)
 
     def test_agendar_turno_duplicado(self):
         """Test agendar turno en horario ya ocupado"""
         fecha_turno = datetime(2025, 6, 16, 10, 0)  # Lunes
         
         # Agendar primer turno
-        resultado1 = self.clinica.agendar_turno("12345678", "MN1234", "cardiologia", fecha_turno)
-        self.assertTrue(resultado1)
-        
+        self.clinica.agendar_turno("12345678", "MN1234", "cardiologia", fecha_turno)
+
         # Intentar agendar segundo turno en misma fecha/hora
         with self.assertRaises(TurnoOcupadoException):
             self.clinica.agendar_turno("87654321", "MN1234", "cardiologia", fecha_turno)
