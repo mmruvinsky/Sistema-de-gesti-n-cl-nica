@@ -249,16 +249,22 @@ class CLI:
             especialidad = input("Especialidad: ").strip()
             fecha_str = input("Fecha (DD/MM/YYYY): ").strip()
             hora_str = input("Hora (HH:MM): ").strip()
-            
+
             fecha_hora = datetime.strptime(f"{fecha_str} {hora_str}", "%d/%m/%Y %H:%M")
-            
-            resultado = self.clinica.agendar_turno(dni, matricula, especialidad, fecha_hora)
-            
-            if not resultado:
-                print("❌ No se pudo agendar el turno")
-                
+
+            self.clinica.agendar_turno(dni, matricula, especialidad, fecha_hora)
+            print("✅ Turno agendado correctamente")
+
         except ValueError:
             print("❌ Formato de fecha/hora incorrecto")
+        except PacienteNoEncontradoException as e:
+            print(f"❌ {e}")
+        except MedicoNoEncontradoException as e:
+            print(f"❌ {e}")
+        except MedicoNoDisponibleException as e:
+            print(f"❌ {e}")
+        except TurnoOcupadoException as e:
+            print(f"❌ {e}")
         except Exception as e:
             print(f"❌ Error: {e}")
     
